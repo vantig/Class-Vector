@@ -12,10 +12,26 @@ class Vector
 
 public:
     Vector() : size(0), capacity(1), data(new Type[1]) {}
-    Vector(size_t);
+    Vector(size_t size1)
+    {
+        size = size1;
+        capacity = size;
+        data = new Type[size];
+    }
+    Vector(const Vector<Type>&v)
+    {
+        size = v.size;
+        capacity = v.capacity;
+        data = new Type(capacity);
+        for (size_t i = 0; i < size; i++)
+        {
+            *(data + i) = *(v.data + i);
+        }
+    }
     ~Vector() { delete[]data; }
-    Vector(const Vector<Type>&);
-    Vector <Type>& operator=(const Vector<Type>&);
+  
+    Vector <Type>& operator=(const Vector<Type>& v);
+   
     typedef Type* Iterator;
     Iterator Begin() { return data; }
     Iterator End() { return data + size; }
@@ -34,6 +50,38 @@ public:
     size_t getSize() { return size; }
     size_t getCapacity() { return capacity; }
 };
+template <class Type>
+Type*  Vector<Type>::find(Iterator it, Type temp)
+{
+    it = this->data;
+    for (size_t i = 0; i < size; i++)
+    {
+        if (*(it+i)==temp)
+        {
+           it=it + i;
+           return it;
+        }
+    }
+    std::cout << "Not found\n";
+    
+}
+template<class Type>
+Vector <Type>& Vector<Type>::operator=(const Vector<Type>& v)
+{
+    if (this != v)
+    {
+        delete this->data;
+        this->capacity = v.capacity;
+        this->data = new Type[capacity];
+        this->size = v.size;
+        for (size_t i = 0; i < size; i++)
+        {
+            *(this->data + i) = *(v.data + i);
+        }
+
+    }
+    return *this;
+}
 template <class Type>
 void Vector<Type>::erase(size_t index)
 {
